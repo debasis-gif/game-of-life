@@ -1,0 +1,27 @@
+node('MASTER'){
+    stage('scm') {
+        git 'https://github.com/debasis-gif/game-of-life.git'
+    }
+    stage('build'){
+        /* input message: 'Continue with GOL-build?', ok: 'Ok'
+           cleanWs() */
+        sh label: 'Shell Build..', script: 'mvn package'
+        
+        catchError(buildResult: 'UNSTABLE', message: 'Build failed...') {
+            echo "Inside catchError block..."
+            currentBuild.result = 'SUCCESS'
+        }
+
+        try {
+            echo 'might fail'
+        } catch (err) {
+            echo "Caught: ${err}"
+            currentBuild.result = 'FAILURE'
+        }
+        step([$class: 'Mailer', recipients: 'debasis_pal_123@yhoo.co.uk'])
+    }
+    stage('postbuild') {
+        archiveArtifacts 'gameoflife-web/target/*.war'
+        junit 'gameoflife-web/target/surefire-reports/*.xml'
+    }
+}
