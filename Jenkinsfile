@@ -5,11 +5,12 @@ pipeline {
     stages {
         stage('Source') {
             steps {
-                git 'https://github.com/debasis-gif/game-of-life.git'
+                git branch: 'master', url: 'https://github.com/debasis-gif/game-of-life.git'
             }
         }
         stage('Package') {
             steps {
+                echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
                 sh 'mvn package'
             }
         }
