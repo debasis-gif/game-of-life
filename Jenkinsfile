@@ -1,16 +1,16 @@
 /* Jenkins Declarative Pipeline */
 pipeline {
-    agent any 
+    agent {label 'MASTER'}
 
     stages {
-        stage('Build') {
+        stage('Source') {
             steps {
-                echo 'Building...'
+                git 'https://github.com/debasis-gif/game-of-life.git'
             }
         }
-        stage('Test') {
+        stage('Package') {
             steps {
-                echo 'Testing...'
+                sh 'mvn package'
             }
         }
         stage('Deploy') {
