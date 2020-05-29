@@ -1,7 +1,7 @@
 /* Jenkins Declarative Pipeline */
 pipeline {
     agent {label 'MASTER'}
-
+    triggers { pollSCM('* * * * *') } 
     stages {
         stage('Source') {
             steps {
