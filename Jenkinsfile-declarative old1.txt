@@ -1,9 +1,7 @@
-/* Jenkins Declarative Pipeline 2 */
+/* Jenkins Declarative Pipeline */
 pipeline {
     agent {label 'MASTER'}
-    triggers { 
-        upstream(upstreamProjects: 'GOL-delcarative-pipeline', threshold: hudson.model.Result.SUCCESS)
-    } 
+    triggers { pollSCM('* * * * *') } 
     stages {
         stage('Source') {
             steps {
@@ -13,7 +11,7 @@ pipeline {
         stage('Package') {
             steps {
                 echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
-                echo 'Successfully called GOL-declarative-pipeline2 after completing earlier job - GOL-declarative-pipeline'
+                sh 'mvn package'
             }
         }
         stage('Deploy') {
